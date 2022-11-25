@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\FakeDataJson;
 use App\Models\FakeDataXml;
-use App\Services\Engines\Fake\FakeEngine;
-use App\Services\Engines\Fake\FakeJsonEngine;
+use App\Services\Engines\FakeEngine;
 
 
 class FakeApiController extends Controller

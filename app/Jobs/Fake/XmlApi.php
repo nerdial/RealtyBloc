@@ -1,26 +1,39 @@
 <?php
 
-namespace App\Services\Engines\Fake;
+namespace App\Jobs\Fake;
 
-use App\Contracts\EngineContract;
 use App\Helpers\FileUploader;
 use App\Helpers\XmlHandler;
 use App\Jobs\UpdateProperties;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
 
-
-class FakeXmlEngine implements EngineContract
+class XmlApi implements ShouldQueue
 {
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
     public function __construct(private Model $engine)
-    {
-    }
+    {}
 
-    public function execute()
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
     {
-
-        $url = config('services.endpoints.fake.xml');
+        $url = config('app.endpoints.fake.xml');
 
         $xmlContent = Http::get($url)->body();
 
@@ -31,13 +44,8 @@ class FakeXmlEngine implements EngineContract
 
             $fileName = FileUploader::uploadToS3($item['image_address']);
 
-            $json = [
-                'Country' => $item['country'],
-                'Height' => $item['height'],
-                'Width' => $item['width'],
-                'Lat' => $item['lat'],
-                'Lng' => $item['lng']
-            ];
+            $json = $this->createMetadata($item);
+
             return [
                 'entity_id' => $item['id'],
                 'engine_id' => $this->engine->id,
@@ -51,6 +59,16 @@ class FakeXmlEngine implements EngineContract
             ];
         });
         UpdateProperties::dispatch($items->toArray());
+    }
 
+    private function createMetadata(array $item): array
+    {
+        return [
+            'Country' => $item['country'],
+            'Height' => $item['height'],
+            'Width' => $item['width'],
+            'Lat' => $item['lat'],
+            'Lng' => $item['lng']
+        ];
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\Engines\Fake\FakeEngine;
+use App\Services\Engines;
 use Illuminate\Console\Command;
 
 class FakeServerCommand extends Command
@@ -29,7 +29,7 @@ class FakeServerCommand extends Command
     public function handle()
     {
 
-        $fakeEngine = new FakeEngine();
+        $fakeEngine = new Engines\FakeEngine();
 
         $fakeEngine->execute();
 

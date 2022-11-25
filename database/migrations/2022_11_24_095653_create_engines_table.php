@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('class_name');
             $table->smallInteger('status');
+            $table->string('key');
             $table->text('endpoint')->nullable();
             $table->timestamps();
         });

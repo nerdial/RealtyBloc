@@ -60,6 +60,15 @@ return [
 
     'image_url' => env('IMAGE_URL', 'http://localhost:9000/'),
 
+    'endpoints' => [
+        'fake' => [
+            'rest' => 'http://localhost:8000/api/fake/json',
+            'xml' =>  'http://localhost:8000/api/fake/xml',
+            'graph' => 'http://localhost:8000/api/fake/graphql'
+        ]
+    ],
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

@@ -29,14 +29,6 @@ return [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
-    ],
-
-    'endpoints' => [
-        'fake' => [
-            'json' => 'http://localhost:8000/api/fake/json',
-            'xml' =>  'http://localhost:8000/api/fake/xml',
-            'graph' => 'http://localhost:8000/api/fake/graphql'
-        ]
     ]
 
 
