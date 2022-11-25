@@ -3,13 +3,10 @@
 namespace App\Services\Engines\Fake;
 
 use App\Contracts\EngineContract;
+use App\Helpers\FileUploader;
 use App\Jobs\UpdateProperties;
-use App\Jobs\UploadImage;
 use App\Models\Engine;
-use App\Models\Property;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 
 class FakeJsonEngine implements EngineContract
@@ -22,15 +19,11 @@ class FakeJsonEngine implements EngineContract
 
         $items = Http::get($url)->json();
 
-
         $engine = Engine::first();
 
         $items = collect($items)->map(function ($item) use ($engine) {
 
-            $fileName = Str::random(20);
-
-            Storage::disk('minio')
-                ->put($fileName, file_get_contents($item['image']));
+            $fileName = FileUploader::uploadToS3($item['image']);
 
             $json = [
                 'City' => $item['city'],

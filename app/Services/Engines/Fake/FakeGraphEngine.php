@@ -4,37 +4,42 @@ namespace App\Services\Engines\Fake;
 
 use App\Contracts\EngineContract;
 use App\Helpers\FileUploader;
-use App\Helpers\XmlHandler;
 use App\Jobs\UpdateProperties;
 use App\Models\Engine;
 use Illuminate\Support\Facades\Http;
 
 
-class FakeXmlEngine implements EngineContract
+class FakeGraphEngine implements EngineContract
 {
 
     public function execute()
     {
 
-        $url = config('services.endpoints.fake.xml');
+        $url = config('services.endpoints.fake.graph');
 
-        $xmlContent = Http::get($url)->body();
+        $query = "
+        {
+          properties {
+            id, title, description, city, address, image, width , height, price, type
+          }
+        }";
 
-        $items = XmlHandler::convertToArray($xmlContent, 'items');
+
+        $items = Http::post($url, [
+            'query' => $query
+        ])->json('data.properties');
+
 
         $engine = Engine::first();
 
-        $items = collect($items)->map(function ($item) use ($engine){
-            $item = $item['item'];
+        $items = collect($items)->map(function ($item) use ($engine) {
 
-            $fileName = FileUploader::uploadToS3($item['image_address']);
+            $fileName = FileUploader::uploadToS3($item['image']);
 
             $json = [
-                'Country' => $item['country'],
+                'City' => $item['city'],
                 'Height' => $item['height'],
-                'Width' => $item['width'],
-                'Lat' => $item['lat'],
-                'Lng' => $item['lng']
+                'Width' => $item['width']
             ];
             return [
                 'entity_id' => $item['id'],
@@ -44,15 +49,15 @@ class FakeXmlEngine implements EngineContract
                 'image_address' => $fileName,
                 'type' => $item['type'],
                 'price' => $item['price'],
-                'description' => $item['body'],
+                'description' => $item['description'],
                 'metadata' => json_encode($json)
             ];
         });
 
         UpdateProperties::dispatch($items->toArray());
 
-        return true;
-
 
     }
+
+
 }

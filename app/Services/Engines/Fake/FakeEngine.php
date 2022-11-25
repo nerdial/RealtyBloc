@@ -19,6 +19,10 @@ class FakeEngine implements EngineContract
 
         $fakeJson = new FakeJsonEngine();
 
+        $fakeGraph = new FakeGraphEngine();
+
+        $fakeGraph->execute();
+
         $fakeXml->execute();
 
         $fakeJson->execute();

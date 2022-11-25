@@ -35,6 +35,7 @@ return [
         'fake' => [
             'json' => 'http://localhost:8000/api/fake/json',
             'xml' =>  'http://localhost:8000/api/fake/xml',
+            'graph' => 'http://localhost:8000/api/fake/graphql'
         ]
     ]
 

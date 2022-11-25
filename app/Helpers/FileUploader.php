@@ -16,6 +16,7 @@ class FileUploader
         Storage::disk('minio')
             ->put($fileName, file_get_contents($url));
 
+        return $fileName;
     }
 
 

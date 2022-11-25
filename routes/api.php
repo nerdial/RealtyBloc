@@ -18,10 +18,12 @@ use \App\Http\Controllers\Api\PropertyController;
 
 Route::prefix('fake')->controller(FakeApiController::class)->group(function () {
 
-    Route::get('json', 'json');
-    Route::get('xml', 'xml');
+    Route::get('json', 'json')->middleware(['throttle:10,10']);
+    Route::get('xml', 'xml')->middleware(['throttle:10,10']);
     Route::get('run', 'run');
 
 });
+
+
 
 Route::get('properties', PropertyController::class);
