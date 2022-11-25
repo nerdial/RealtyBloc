@@ -1,0 +1,25 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type FakeDataJson {
+    "Unique primary key."
+    id: ID!
+    title: String!
+    city: String!
+    address: String!
+    image: String!
+    width: String!
+    height: String!
+    price: String!
+    type: String!
+    description: String!
+}
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+
+    "List multiple users."
+    properties: [FakeDataJson!]! @all
+}
+
+
