@@ -26,7 +26,6 @@ class FakeJsonEngine implements EngineContract
         $engine = Engine::first();
 
         $items = collect($items)->map(function ($item) use ($engine) {
-            $item = $item['item'];
 
             $fileName = Str::random(20);
 
@@ -46,7 +45,7 @@ class FakeJsonEngine implements EngineContract
                 'image_address' => $fileName,
                 'type' => $item['type'],
                 'price' => $item['price'],
-                'description' => $item['body'],
+                'description' => $item['description'],
                 'metadata' => json_encode($json)
             ];
         });
