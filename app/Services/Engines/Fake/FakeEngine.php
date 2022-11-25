@@ -3,6 +3,7 @@
 namespace App\Services\Engines\Fake;
 
 use App\Contracts\EngineContract;
+use App\Models\Engine;
 
 class FakeEngine implements EngineContract
 {
@@ -14,19 +15,17 @@ class FakeEngine implements EngineContract
 
     public function execute()
     {
+        $engine = Engine::first();
+        if ($engine->status) {
 
-        $fakeXml = new FakeXmlEngine();
+            $fakeXml = new FakeXmlEngine($engine);
+            $fakeXml->execute();
+            $fakeJson = new FakeJsonEngine($engine);
+            $fakeJson->execute();
+            $fakeGraph = new FakeGraphEngine($engine);
+            $fakeGraph->execute();
 
-        $fakeJson = new FakeJsonEngine();
-
-        $fakeGraph = new FakeGraphEngine();
-
-        $fakeGraph->execute();
-
-        $fakeXml->execute();
-
-        $fakeJson->execute();
-
+        }
 
     }
 

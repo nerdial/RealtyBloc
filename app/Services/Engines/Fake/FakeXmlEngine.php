@@ -6,12 +6,16 @@ use App\Contracts\EngineContract;
 use App\Helpers\FileUploader;
 use App\Helpers\XmlHandler;
 use App\Jobs\UpdateProperties;
-use App\Models\Engine;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 
 
 class FakeXmlEngine implements EngineContract
 {
+
+    public function __construct(private Model $engine)
+    {
+    }
 
     public function execute()
     {
@@ -22,9 +26,7 @@ class FakeXmlEngine implements EngineContract
 
         $items = XmlHandler::convertToArray($xmlContent, 'items');
 
-        $engine = Engine::first();
-
-        $items = collect($items)->map(function ($item) use ($engine){
+        $items = collect($items)->map(function ($item) {
             $item = $item['item'];
 
             $fileName = FileUploader::uploadToS3($item['image_address']);
@@ -38,7 +40,7 @@ class FakeXmlEngine implements EngineContract
             ];
             return [
                 'entity_id' => $item['id'],
-                'engine_id' => $engine->id,
+                'engine_id' => $this->engine->id,
                 'title' => $item['title'],
                 'address' => $item['address'],
                 'image_address' => $fileName,
@@ -50,9 +52,6 @@ class FakeXmlEngine implements EngineContract
         });
 
         UpdateProperties::dispatch($items->toArray());
-
-        return true;
-
 
     }
 }

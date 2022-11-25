@@ -5,12 +5,17 @@ namespace App\Services\Engines\Fake;
 use App\Contracts\EngineContract;
 use App\Helpers\FileUploader;
 use App\Jobs\UpdateProperties;
-use App\Models\Engine;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 
 
 class FakeJsonEngine implements EngineContract
 {
+
+    public function __construct(private Model $engine)
+    {
+    }
+
 
     public function execute()
     {
@@ -19,9 +24,8 @@ class FakeJsonEngine implements EngineContract
 
         $items = Http::get($url)->json();
 
-        $engine = Engine::first();
 
-        $items = collect($items)->map(function ($item) use ($engine) {
+        $items = collect($items)->map(function ($item){
 
             $fileName = FileUploader::uploadToS3($item['image']);
 
@@ -32,7 +36,7 @@ class FakeJsonEngine implements EngineContract
             ];
             return [
                 'entity_id' => $item['id'],
-                'engine_id' => $engine->id,
+                'engine_id' => $this->engine->id,
                 'title' => $item['title'],
                 'address' => $item['address'],
                 'image_address' => $fileName,
