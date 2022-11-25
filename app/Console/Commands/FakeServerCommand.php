@@ -33,6 +33,7 @@ class FakeServerCommand extends Command
 
         $fakeEngine->execute();
 
+        $this->comment('Records have been updated successfully');
 
         return Command::SUCCESS;
     }

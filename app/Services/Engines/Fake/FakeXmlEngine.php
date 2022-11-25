@@ -50,7 +50,6 @@ class FakeXmlEngine implements EngineContract
                 'metadata' => json_encode($json)
             ];
         });
-
         UpdateProperties::dispatch($items->toArray());
 
     }

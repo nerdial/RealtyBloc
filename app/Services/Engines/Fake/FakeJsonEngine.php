@@ -21,9 +21,7 @@ class FakeJsonEngine implements EngineContract
     {
 
         $url = config('services.endpoints.fake.json');
-
         $items = Http::get($url)->json();
-
 
         $items = collect($items)->map(function ($item){
 
@@ -48,8 +46,6 @@ class FakeJsonEngine implements EngineContract
         });
 
         UpdateProperties::dispatch($items->toArray());
-
-
     }
 
 

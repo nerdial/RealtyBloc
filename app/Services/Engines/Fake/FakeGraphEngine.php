@@ -17,9 +17,7 @@ class FakeGraphEngine implements EngineContract
 
     public function execute()
     {
-
         $url = config('services.endpoints.fake.graph');
-
         $query = "
         {
           properties {
@@ -27,13 +25,9 @@ class FakeGraphEngine implements EngineContract
           }
         }";
 
-
         $items = Http::post($url, [
             'query' => $query
         ])->json('data.properties');
-
-
-
 
         $items = collect($items)->map(function ($item)  {
 
