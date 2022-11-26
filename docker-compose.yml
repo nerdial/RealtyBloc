@@ -19,5 +19,10 @@ services:
           MINIO_ROOT_USER: app
           MINIO_ROOT_PASSWORD: password
       command: server --console-address ":9001" /data
+  redis:
+      image: redis
+      restart: always
+      ports:
+          - '6379:6379'
 volumes:
     minio_storage: {}
