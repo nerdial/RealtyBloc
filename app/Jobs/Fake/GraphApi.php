@@ -34,9 +34,17 @@ class GraphApi implements ShouldQueue
     {
         $url = config('app.endpoints.fake.graph');
 
-        $items = Http::post($url, [
+        $res = Http::post($url, [
             'query' => $this->generateQuery()
-        ])->json('data.properties');
+        ]);
+
+        if($res->failed()){
+            log($res->body());
+            $res->throw();
+        }
+
+        $items = $res->json('data.properties');
+
 
         $items = collect($items)->map(function ($item) {
 

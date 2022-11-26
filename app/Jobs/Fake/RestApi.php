@@ -33,7 +33,14 @@ class RestApi implements ShouldQueue
     public function handle()
     {
         $url = config('app.endpoints.fake.rest');
-        $items = Http::get($url)->json();
+        $res = Http::get($url);
+
+        if($res->failed()){
+            log($res->body());
+            $res->throw();
+        }
+
+        $items = $res->json();
 
         $items = collect($items)->map(function ($item){
 

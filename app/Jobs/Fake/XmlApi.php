@@ -35,7 +35,14 @@ class XmlApi implements ShouldQueue
     {
         $url = config('app.endpoints.fake.xml');
 
-        $xmlContent = Http::get($url)->body();
+        $res = Http::get($url);
+
+        if($res->failed()){
+            log($res->body());
+            $res->throw();
+        }
+
+        $xmlContent = $res->body();
 
         $items = XmlHandler::convertToArray($xmlContent, 'items');
 
