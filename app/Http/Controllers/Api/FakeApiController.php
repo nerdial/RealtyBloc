@@ -32,12 +32,4 @@ class FakeApiController extends Controller
         return response()->xml($data);
 
     }
-
-
-    public function run(FakeEngine $fakeRestEngine)
-    {
-        $fakeRestEngine->execute();
-    }
-
-
 }
