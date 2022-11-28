@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Models\Engine;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,7 +16,17 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('fakeApi:run')->everyMinute();
+
+        $engines = cache()->remember('engines', 10, function () {
+            return Engine::where('status', 1)->get();
+        });
+
+        foreach ($engines as $engine){
+            $minute =  60 / $engine->rate_limit;
+            $time = "*/{$minute} * * * *";
+            $schedule->command($engine->class_name)->cron($time);
+        }
+
     }
 
     /**

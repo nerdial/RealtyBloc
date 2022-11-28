@@ -18,9 +18,10 @@ class EngineSeeder extends Seeder
 
         Engine::create([
             'title' => 'Fake Server',
-            'class_name' => FakeEngine::class,
+            'class_name' => 'fakeApi:run',
             'status' => 1,
-            'key' => 'fakeServer'
+            'key' => 'fakeServer',
+            'rate_limit' => 20
         ]);
 
     }

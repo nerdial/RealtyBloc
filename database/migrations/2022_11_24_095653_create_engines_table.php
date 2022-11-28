@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('class_name');
             $table->smallInteger('status');
             $table->string('key');
+            $table->integer('rate_limit');
             $table->text('endpoint')->nullable();
             $table->timestamps();
         });
